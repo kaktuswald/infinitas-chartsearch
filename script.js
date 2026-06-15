@@ -24,8 +24,7 @@ async function complete_loaded() {
     load_datafile("DP"),
   ]);
 
-  filtered = data["SP"];
-  renderPage();
+  search();
 }
 
 document.addEventListener("DOMContentLoaded", complete_loaded);
