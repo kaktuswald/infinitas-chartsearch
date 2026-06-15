@@ -10,58 +10,95 @@
 <body>
   <h1>INFINITAS Chart Search</h1>
 
-  <input type="radio" name="playmode" value="SP" checked> SP
-  <input type="radio" name="playmode" value="DP"> DP
+  <div id="playmode">
+    <input type="radio" name="playmode" value="SP" checked> SP
+    <input type="radio" name="playmode" value="DP"> DP
+  </div>
 
-  <br>
+  <div id="conditions">
+    <div id="version">
+      <span>バージョン</span>
+      <input type="checkbox" name="version" value="1st&substream"> 1st&substream
+      <input type="checkbox" name="version" value="2nd style"> 2nd style
+      <input type="checkbox" name="version" value="3rd style"> 3rd style
+      <input type="checkbox" name="version" value="4th style"> 4th style
+      <input type="checkbox" name="version" value="5th style"> 5th style
+      <input type="checkbox" name="version" value="6th style"> 6th style
+      <input type="checkbox" name="version" value="7th style"> 7th style
+      <input type="checkbox" name="version" value="8th style"> 8th style
+      <input type="checkbox" name="version" value="9th style"> 9th style
+      <input type="checkbox" name="version" value="10th style"> 10th style
+      <input type="checkbox" name="version" value="IIDX RED"> IIDX RED
+      <input type="checkbox" name="version" value="HAPPY SKY"> HAPPY SKY
+      <input type="checkbox" name="version" value="DistorteD"> DistorteD
+      <input type="checkbox" name="version" value="GOLD"> GOLD
+      <input type="checkbox" name="version" value="DJ TROOPERS"> DJ TROOPERS
+      <input type="checkbox" name="version" value="EMPRESS"> EMPRESS
+      <input type="checkbox" name="version" value="SIRIUS"> SIRIUS
+      <input type="checkbox" name="version" value="Resort Anthem"> Resort Anthem
+      <input type="checkbox" name="version" value="Lincle"> Lincle
+      <input type="checkbox" name="version" value="tricoro"> tricoro
+      <input type="checkbox" name="version" value="SPADA"> SPADA
+      <input type="checkbox" name="version" value="PENDUAL"> PENDUAL
+      <input type="checkbox" name="version" value="copula"> copula
+      <input type="checkbox" name="version" value="SINOBUZ"> SINOBUZ
+      <input type="checkbox" name="version" value="CANNON BALLERS"> CANNON BALLERS
+      <input type="checkbox" name="version" value="Rootage"> Rootage
+      <input type="checkbox" name="version" value="HEROIC VERSE"> HEROIC VERSE
+      <input type="checkbox" name="version" value="BISTROVER"> BISTROVER
+      <input type="checkbox" name="version" value="CastHour"> CastHour
+      <input type="checkbox" name="version" value="RESIDENT"> RESIDENT
+      <input type="checkbox" name="version" value="EPOLIS"> EPOLIS
+      <input type="checkbox" name="version" value="Pinky Crush"> Pinky Crush
+      <input type="checkbox" name="version" value="Sparkle Shower"> Sparkle Shower
+      <input type="checkbox" name="version" value="INFINITAS"> INFINITAS
+    </div>
+    
+    <div id="difficulty">
+      <span>難易度</span>
+      <input type="checkbox" name="difficulty" value="BEGINNER"> BEGINNER
+      <input type="checkbox" name="difficulty" value="NORMAL"> NORMAL
+      <input type="checkbox" name="difficulty" value="HYPER" checked> HYPER
+      <input type="checkbox" name="difficulty" value="ANOTHER" checked> ANOTHER
+      <input type="checkbox" name="difficulty" value="LEGGENDARIA"> LEGGENDARIA
+    </div>
+    
+    <div id="level">
+      <span>レベル</span>
+      <input type="checkbox" name="level" value="1"> 1
+      <input type="checkbox" name="level" value="2"> 2
+      <input type="checkbox" name="level" value="3"> 3
+      <input type="checkbox" name="level" value="4"> 4
+      <input type="checkbox" name="level" value="5"> 5
+      <input type="checkbox" name="level" value="6"> 6
+      <input type="checkbox" name="level" value="7"> 7
+      <input type="checkbox" name="level" value="8"> 8
+      <input type="checkbox" name="level" value="9"> 9
+      <input type="checkbox" name="level" value="10"> 10
+      <input type="checkbox" name="level" value="11"> 11
+      <input type="checkbox" name="level" value="12"> 12
+    </div>
+    
+    <div id="notesradar">
+      <span>ノーツレーダー</span>
+      <input type="checkbox" name="notesradar" value="NOTES"> NOTES
+      <input type="checkbox" name="notesradar" value="CHORD"> CHORD
+      <input type="checkbox" name="notesradar" value="PEAK"> PEAK
+      <input type="checkbox" name="notesradar" value="SCRATCH"> SCRATCH
+      <input type="checkbox" name="notesradar" value="CHARGE"> CHARGE
+      <input type="checkbox" name="notesradar" value="SOF-LAN"> SOF-LAN
+      <input type="checkbox" name="notesradar" value="empty"> 不明
+    </div>
+
+    <input id="keyword_songname" placeholder="曲名検索">
+  </div>
+
+  <button onclick="search()">検索</button>
   
-  <input type="checkbox" name="version" value="1st&substream"> 1st&substream
-  <input type="checkbox" name="version" value="INFINITAS"> INFINITAS
-
-  <br>
-  
-  <input type="checkbox" name="difficulty" value="BEGINNER"> BEGINNER
-  <input type="checkbox" name="difficulty" value="NORMAL"> NORMAL
-  <input type="checkbox" name="difficulty" value="HYPER" checked> HYPER
-  <input type="checkbox" name="difficulty" value="ANOTHER" checked> ANOTHER
-  <input type="checkbox" name="difficulty" value="LEGGENDARIA"> LEGGENDARIA
-
-  <br>
-  
-  <input type="checkbox" name="level" value="1"> 1
-  <input type="checkbox" name="level" value="2"> 2
-  <input type="checkbox" name="level" value="3"> 3
-  <input type="checkbox" name="level" value="4"> 4
-  <input type="checkbox" name="level" value="5"> 5
-  <input type="checkbox" name="level" value="6"> 6
-  <input type="checkbox" name="level" value="7"> 7
-  <input type="checkbox" name="level" value="8"> 8
-  <input type="checkbox" name="level" value="9"> 9
-  <input type="checkbox" name="level" value="10"> 10
-  <input type="checkbox" name="level" value="11"> 11
-  <input type="checkbox" name="level" value="12"> 12
-
-  <br>
-  
-  <input type="checkbox" name="notesradar" value="NOTES"> NOTES
-  <input type="checkbox" name="notesradar" value="CHORD"> CHORD
-  <input type="checkbox" name="notesradar" value="PEAK"> PEAK
-  <input type="checkbox" name="notesradar" value="SCRATCH"> SCRATCH
-  <input type="checkbox" name="notesradar" value="CHARGE"> CHARGE
-  <input type="checkbox" name="notesradar" value="SOF-LAN"> SOF-LAN
-  <input type="checkbox" name="notesradar" value="empty"> 不明
-
-  <br><br>
-
-  <input id="keyword_songname" placeholder="曲名検索">
-  <button onclick="search()">曲名検索</button>
-
   <div id="pager"></div>
 
-  <table border="1">
+  <table>
     <tbody id="result"></tbody>
   </table>
-
-  <table border="1" id="result"></table>
 </body>
 </html>

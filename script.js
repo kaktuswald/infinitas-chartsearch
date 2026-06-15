@@ -4,16 +4,31 @@ const pageSize = 100;
 let filtered = [];
 let currentPage = 1;
 
-["SP", "DP"].forEach(playmode => {
-  Papa.parse(`data_${playmode}.csv`, {
-    download: true,
-    header: false,
-    skipEmptyLines: true,
-    complete: function(results) {
-      data[playmode] = results.data;
-    }
+function load_datafile(playmode) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(`data_${playmode}.csv`, {
+      download: true,
+      header: false,
+      skipEmptyLines: true,
+      complete: function(results) {
+        data[playmode] = results.data;
+        resolve();
+      }
+    })
   });
-});
+}
+
+async function complete_loaded() {
+  await Promise.all([
+    load_datafile("SP"),
+    load_datafile("DP"),
+  ]);
+
+  filtered = data["SP"];
+  renderPage();
+}
+
+document.addEventListener("DOMContentLoaded", complete_loaded);
 
 /**
  * 検索する
@@ -88,8 +103,20 @@ function renderPage() {
   let html = "";
   html += "<tr><th>バージョン</th><th>曲名</th><th>難易度</th><th>レベル</th><th>レーダー</th></tr>"
   pageRows.forEach(row => {
-    html += "<tr>" + row.map(v => `<td>${v}</td>`).join("") + "</tr>";
+    const difficultyClass = getDifficultyClass(row[2]);
+    const levelClass = getLevelClass(row[3]);
+
+    html += `
+      <tr>
+        <td>${row[0] || ""}</td>
+        <td class="song-title">${row[1] || ""}</td>
+        <td class="${difficultyClass}">${row[2] || ""}</td>
+        <td class="${levelClass}">${row[3] || ""}</td>
+        <td>${row[4] || ""}</td>
+      </tr>
+    `;
   });
+
   table.innerHTML = html || "<tr><td>該当なし</td></tr>";
 
   const totalPages = Math.ceil(filtered.length / pageSize);
@@ -106,6 +133,34 @@ function renderPage() {
     pagerHtml += `<button onclick="nextPage() disabled">次へ</button>`;
 
   pager.innerHTML = pagerHtml;
+}
+
+/**
+ * 指定の難易度のクラス名を取得
+ * @param {String} value 難易度
+ * @returns クラス名
+ */
+function getDifficultyClass(value) {
+  const v = String(value || "").toLowerCase();
+
+  if (v.includes("beginner")) return "diff-beginner";
+  if (v.includes("normal")) return "diff-normal";
+  if (v.includes("hyper")) return "diff-hyper";
+  if (v.includes("another")) return "diff-another";
+  if (v.includes("leggendaria")) return "diff-leggendaria";
+
+  return "";
+}
+
+/**
+ * 指定のレベルのクラス名を取得
+ * @param {String} value レベル
+ * @returns クラス名
+ */
+function getLevelClass(value) {
+  const level = parseInt(value, 10);
+  if (!level) return "";
+  return `level-${level}`;
 }
 
 /**
