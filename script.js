@@ -174,7 +174,7 @@ function insert_checkbox(parent, name, value, text) {
  */
 function load_datafile(playmode) {
   return new Promise((resolve, reject) => {
-    Papa.parse(`data_${playmode}.csv`, {
+    Papa.parse(`https://raw.githubusercontent.com/wiki/kaktuswald/infinitas-chartsearch/${playmode}.csv`, {
       download: true,
       header: false,
       skipEmptyLines: true,

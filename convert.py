@@ -1,10 +1,11 @@
 # リザルト手帳のCSVから譜面情報だけを取り出したCSVを作る
 
 import csv
+from os.path import join
 
 for filename in ("SP.csv", "DP.csv",):
     with open(filename, newline="", encoding="utf-8") as fin, \
-        open(f"data_{filename}", "w", newline="", encoding="utf-8") as fout:
+        open(join("wiki", filename), "w", newline="", encoding="utf-8") as fout:
 
         reader = csv.reader(fin)
         writer = csv.writer(fout)
