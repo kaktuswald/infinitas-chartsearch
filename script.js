@@ -1,3 +1,5 @@
+const wikiurl = 'https://raw.githubusercontent.com/wiki/kaktuswald/infinitas-chartsearch';
+
 const pageSize = 100;
 
 const versions = [
@@ -97,6 +99,9 @@ async function complete_loaded() {
       sortColIndex = parseInt(btn.dataset.col, 10);
       sortOrder = btn.dataset.order;
 
+      document.querySelectorAll(".sort-icon").forEach(element => element.classList.remove("sort-active"));
+      btn.classList.add("sort-active");
+
       search();
     });
   });
@@ -140,12 +145,24 @@ async function complete_loaded() {
     );
   });
 
-  await Promise.all([
-    load_datafile("SP"),
-    load_datafile("DP"),
-  ]);
+  const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
+  if(response.ok) {
+    const timestamp = await response.text();
 
-  search();
+    const year = timestamp.slice(0, 4);
+    const month = timestamp.slice(4, 6);
+    const day = timestamp.slice(6, 8);
+    const hour = timestamp.slice(8, 10);
+    const minute = timestamp.slice(10, 12);
+    document.querySelector("span#last-modefied").textContent = `${year}年${month}月${day}日 ${hour}時${minute}分`;
+
+    await Promise.all([
+      load_datafile("SP", timestamp),
+      load_datafile("DP", timestamp),
+    ]);
+
+    search();
+  }
 }
 
 /**
@@ -171,11 +188,12 @@ function insert_checkbox(parent, name, value, text) {
 /**
  * データCSVファイルをロードする
  * @param {String} playmode プレイモード
+ * @param {String} timestamp データのタイムスタンプ
  * @returns Promiseインスタンス
  */
-function load_datafile(playmode) {
+ function load_datafile(playmode, timestamp) {
   return new Promise((resolve, reject) => {
-    Papa.parse(`https://raw.githubusercontent.com/wiki/kaktuswald/infinitas-chartsearch/${playmode}.csv`, {
+    Papa.parse(`${wikiurl}/${playmode}.csv?${timestamp}`, {
       download: true,
       header: false,
       skipEmptyLines: true,

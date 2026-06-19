@@ -10,6 +10,11 @@
 <body>
   <h1>INFINITAS Chart Search</h1>
 
+  <div>
+    <span>データ更新</span>
+    <span id="last-modefied">読み込み中...</span>
+  </div>
+
   <div id="playmode">
     <span>プレイモード</span>
     <label>
@@ -37,12 +42,16 @@
       <span>ノーツレーダー</span>
     </div>
 
-    <input id="keyword_songname" placeholder="曲名検索">
+    <div id="songname">
+      <span>曲名検索</span>
+      <input id="keyword_songname" placeholder="部分一致">
+    </div>
   </div>
 
-  <button onclick="search()">検索</button>
-  
-  <div id="pager"></div>
+  <div id="search">
+    <button onclick="search()">検索</button>
+    <div id="pager"></div>
+  </div>
 
   <table>
     <thead>
