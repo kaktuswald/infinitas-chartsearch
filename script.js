@@ -464,7 +464,7 @@ function renderPage() {
     `;
   });
 
-  table.innerHTML = html || '<tr><td colspan="6">該当なし</td></tr>';
+  table.innerHTML = html || '<tr><td colspan="8">該当なし</td></tr>';
   
   const totalPages = Math.ceil(resultdata.length / pageSize);
 
