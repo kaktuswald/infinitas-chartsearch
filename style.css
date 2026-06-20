@@ -27,6 +27,8 @@ body {
 }
 
 .filter-toggle {
+  all: unset;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   width: 100%;
@@ -41,6 +43,8 @@ body {
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .filter-toggle:hover {

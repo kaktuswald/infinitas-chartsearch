@@ -337,29 +337,36 @@ function sync_all_checkbox(name) {
  */
 function setup_collapsible_conditions() {
   const parent = document.querySelector("div#conditions");
-  const button = document.createElement("button");
+  const toggleButton = document.createElement("div");
   const titleText = "フィルタ条件";
 
-  button.type = "button";
-  button.className = "filter-toggle";
-  button.textContent = `▼ ${titleText}`;
-  button.setAttribute("aria-expanded", "true");
+  toggleButton.className = "filter-toggle";
+  toggleButton.textContent = `▼ ${titleText}`;
+  toggleButton.tabIndex = 0;
+  toggleButton.setAttribute("role", "button");
+  toggleButton.setAttribute("aria-expanded", "true");
 
-  parent.prepend(button);
+  parent.prepend(toggleButton);
 
   const toggle = () => {
     const collapsed = parent.classList.toggle("filter-collapsed");
-    button.setAttribute("aria-expanded", String(!collapsed));
-    button.textContent = `${collapsed ? "▶" : "▼"} ${titleText}`;
+    toggleButton.setAttribute("aria-expanded", String(!collapsed));
+    toggleButton.textContent = `${collapsed ? "▶" : "▼"} ${titleText}`;
 
     Array.from(parent.children).forEach(child => {
-      if(child !== button) {
+      if(child !== toggleButton) {
         child.hidden = collapsed;
       }
     });
   };
 
-  button.addEventListener("click", toggle);
+  toggleButton.addEventListener("click", toggle);
+  toggleButton.addEventListener("keydown", event => {
+    if(event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggle();
+    }
+  });
 }
 
 /**
