@@ -73,6 +73,56 @@ const notesradars = [
   "",
 ];
 
+const categories = [
+  "初期収録曲",
+  "DJP解禁曲",
+  "BIT解禁曲",
+  "The 4th セレクション 楽曲パック vol.1",
+  "楽曲パック vol.29",
+  "GITADORA セレクション 楽曲パック vol.1",
+  "楽曲パック vol.28",
+  "SOUND VOLTEX セレクション 楽曲パック vol.2",
+  "楽曲パック vol.27",
+  "楽曲パック vol.26",
+  "ULTIMATE MOBILE セレクション 楽曲パック vol.1",
+  "BPL セレクション 楽曲パック vol.2",
+  "楽曲パック vol.25",
+  "東方Project セレクション 楽曲パック vol.1",
+  "楽曲パック vol.24",
+  "楽曲パック vol.23",
+  "楽曲パック vol.22",
+  "pop'n music セレクション 楽曲パック vol.2",
+  "楽曲パック vol.21",
+  "楽曲パック vol.20",
+  "楽曲パック vol.19",
+  "SOUND VOLTEX セレクション 楽曲パック vol.1",
+  "楽曲パック vol.18",
+  "楽曲パック vol.17",
+  "BPL セレクション 楽曲パック vol.1",
+  "jubeat セレクション 楽曲パック vol.1",
+  "楽曲パック vol.16",
+  "スタートアップセレクション 楽曲パック vol.3",
+  "楽曲パック vol.15",
+  "スタートアップセレクション 楽曲パック vol.2",
+  "楽曲パック vol.14",
+  "pop'n music セレクション 楽曲パック vol.1",
+  "スタートアップセレクション 楽曲パック vol.1",
+  "楽曲パック vol.13",
+  "楽曲パック vol.12",
+  "楽曲パック vol.11",
+  "楽曲パック vol.10",
+  "楽曲パック vol.9",
+  "楽曲パック vol.8",
+  "楽曲パック vol.7",
+  "楽曲パック vol.6",
+  "楽曲パック vol.5",
+  "楽曲パック vol.4",
+  "楽曲パック vol.3",
+  "楽曲パック vol.2",
+  "楽曲パック vol.1",
+  "",
+]
+
 const default_checked = [
   "HYPER",
   "ANOTHER",
@@ -89,6 +139,7 @@ let sortOrder = "asc";
 let orderMapVersions = {};
 let orderMapDifficulties = {};
 let orderMapNotesradars = {};
+let orderMapCategories = {};
 
 /**
  * ロード完了時の初期処理
@@ -145,6 +196,16 @@ async function complete_loaded() {
     );
   });
 
+  categories.forEach((key, i) => {
+    orderMapCategories[key] = i;
+    insert_checkbox(
+      document.querySelector("div#category"),
+      "category",
+      key !== "" ? key : "unknown",
+      key !== "" ? key : "不明",
+    );
+  });
+
   const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
   if(response.ok) {
     const timestamp = await response.text();
@@ -160,6 +221,38 @@ async function complete_loaded() {
       load_datafile("SP", timestamp),
       load_datafile("DP", timestamp),
     ]);
+
+    const selected_playmode = await JSON.parse(localStorage.getItem("selected_playmode") || null);
+    if(selected_playmode)
+      document.querySelector(`input[name="playmode"][value="${selected_playmode}"`).checked = true;
+    // document.querySelectorAll('input[name="playmode"]').forEach(cb => {
+    //   cb.checked = selected_playmode == cb.value;
+    // });
+
+    const selected_version = await JSON.parse(localStorage.getItem("selected_version") || "[]");
+    document.querySelectorAll('input[name="version"]').forEach(cb => {
+      cb.checked = selected_version.includes(cb.value);
+    });
+
+    const selected_difficulty = await JSON.parse(localStorage.getItem("selected_difficulty") || "[]");
+    document.querySelectorAll('input[name="difficulty"]').forEach(cb => {
+      cb.checked = selected_difficulty.includes(cb.value);
+    });
+
+    const selected_level = await JSON.parse(localStorage.getItem("selected_level") || "[]");
+    document.querySelectorAll('input[name="level"]').forEach(cb => {
+      cb.checked = selected_level.includes(cb.value);
+    });
+
+    const selected_notesradar = await JSON.parse(localStorage.getItem("selected_notesradar") || "[]");
+    document.querySelectorAll('input[name="notesradar"]').forEach(cb => {
+      cb.checked = selected_notesradar.includes(cb.value);
+    });
+
+    const selected_category = await JSON.parse(localStorage.getItem("selected_category") || "[]");
+    document.querySelectorAll('input[name="category"]').forEach(cb => {
+      cb.checked = selected_category.includes(cb.value);
+    });
 
     search();
   }
@@ -213,7 +306,7 @@ function insert_checkbox(parent, name, value, text) {
  * 検索する
  */
 function search() {
-  const playmode = document.querySelector('input[name="playmode"]:checked').value;
+  const selected_playmode = document.querySelector('input[name="playmode"]:checked').value;
 
   const selected_version = Array.from(document.querySelectorAll('input[name="version"]:checked'))
                         .map(cb => cb.value);
@@ -227,14 +320,25 @@ function search() {
   const selected_notesradar = Array.from(document.querySelectorAll('input[name="notesradar"]:checked'))
                         .map(cb => cb.value);
 
+  const selected_category = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                        .map(cb => cb.value);
+
   const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
 
-  const filtered = data[playmode].filter(row => {
+  localStorage.setItem("selected_playmode", JSON.stringify(selected_playmode));
+  localStorage.setItem("selected_version", JSON.stringify(selected_version));
+  localStorage.setItem("selected_difficulty", JSON.stringify(selected_difficulty));
+  localStorage.setItem("selected_level", JSON.stringify(selected_level));
+  localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradar));
+  localStorage.setItem("selected_category", JSON.stringify(selected_category));
+
+  const filtered = data[selected_playmode].filter(row => {
     const version = String(row[0] || "");
     const songname = String(row[1] || "").toLowerCase();
-    const difficulty = String(row[2] || "");
-    const level = String(row[3] || "");
-    const notesradar = String(row[5] || "");
+    const difficulty = String(row[3] || "");
+    const level = String(row[4] || "");
+    const notesradar = String(row[6] || "");
+    const category = String(row[7] || "");
 
     const match_version =
       selected_version.length === 0 || selected_version.includes(version);
@@ -252,7 +356,11 @@ function search() {
       selected_notesradar.length === 0 ||
       selected_notesradar.some(v => (v === "unknown" && notesradar === "") || notesradar.includes(v));
 
-    return match_version && match_songname && match_difficulty && match_level && match_notesradar;
+    const match_category =
+      selected_category.length === 0 ||
+      selected_category.some(v => (v === "unknown" && category === "") || category.includes(v));
+
+    return match_version && match_songname && match_difficulty && match_level && match_notesradar && match_category;
   });
 
   if(sortColIndex === 1) {
@@ -288,16 +396,22 @@ function compareValues(a, b, order) {
     case 0:
       result = orderMapVersions[a] - orderMapVersions[b];
       break;
-    case 2:
+    case 3:
       result = orderMapDifficulties[a] - orderMapDifficulties[b];
       break;
-    case 3:
     case 4:
+    case 5:
       result = a - b;
       break;
-    case 5:
+    case 6:
       if(!a.includes("/") && !b.includes("/"))
         result = orderMapNotesradars[a] - orderMapNotesradars[b];
+      else
+        result = a.includes("/") ? -1 : 1;
+      break;
+    case 7:
+      if(!a.includes("/") && !b.includes("/"))
+        result = orderMapCategories[a] - orderMapCategories[b];
       else
         result = a.includes("/") ? -1 : 1;
       break;
@@ -340,10 +454,12 @@ function renderPage() {
       <tr>
         <td class="version-badge ver-${row[0].replace(" ", "_")}">${row[0] || ""}</td>
         <td class="songname-badge">${row[1] || ""}</td>
-        <td class="diff-badge diff-${row[2]}">${row[2] || ""}</td>
-        <td class="level-badge level-${row[3]}">${row[3] || ""}</td>
-        <td class="notes-badge">${row[4]}</td>
-        <td class="notesradar-badge notesradar-${row[5]}">${row[5] || ""}</td>
+        <td class="artist-badge">${row[2] || ""}</td>
+        <td class="diff-badge diff-${row[3]}">${row[3] || ""}</td>
+        <td class="level-badge level-${row[4]}">${row[4] || ""}</td>
+        <td class="notes-badge">${row[5]}</td>
+        <td class="notesradar-badge notesradar-${row[6]}">${row[6] || ""}</td>
+        <td class="categor-badge categor-${row[7]}">${row[7] || ""}</td>
       </tr>
     `;
   });

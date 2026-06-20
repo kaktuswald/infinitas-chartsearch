@@ -103,11 +103,13 @@ input[type="radio"] {
 共通バッジ
 ========================= */
 .version-badge,
-.songname-badge
+.songname-badge,
+.artist-badge,
 .diff-badge,
 .level-badge,
 .notes-badge,
-.notesradar-badge {
+.notesradar-badge,
+.category-badge {
   align-items: center;
   justify-content: center;
   min-height: 24px;
@@ -268,7 +270,7 @@ input[type="radio"] {
   border-color: rgba(96, 165, 250, 0.35);
 }
 
-.sortbuttons:active {
+.sort-buttons:active {
   transform: scale(0.96);
 }
 

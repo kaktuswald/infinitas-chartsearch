@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>INFINITAS Chart Search</title>
+  <link rel="icon" href="./favicon.ico">
   <link rel="stylesheet" href="./style.css">
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
@@ -42,6 +43,10 @@
       <span>ノーツレーダー</span>
     </div>
 
+    <div id="category">
+      <span>カテゴリ</span>
+    </div>
+
     <div id="songname">
       <span>曲名検索</span>
       <input id="keyword_songname" placeholder="部分一致">
@@ -71,31 +76,41 @@
           </div>
         </th>
         <th>
-          難易度
-          <div class="sort-buttons">
-            <button class="sort-icon" data-col="2" data-order="asc">▲</button>
-            <button class="sort-icon" data-col="2" data-order="desc">▼</button>
-          </div>
+          アーティスト
         </th>
         <th>
-          レベル
+          難易度
           <div class="sort-buttons">
             <button class="sort-icon" data-col="3" data-order="asc">▲</button>
             <button class="sort-icon" data-col="3" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          ノーツ数
+          レベル
           <div class="sort-buttons">
             <button class="sort-icon" data-col="4" data-order="asc">▲</button>
             <button class="sort-icon" data-col="4" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          レーダー
+          ノーツ数
           <div class="sort-buttons">
             <button class="sort-icon" data-col="5" data-order="asc">▲</button>
             <button class="sort-icon" data-col="5" data-order="desc">▼</button>
+          </div>
+        </th>
+        <th>
+          レーダー
+          <div class="sort-buttons">
+            <button class="sort-icon" data-col="6" data-order="asc">▲</button>
+            <button class="sort-icon" data-col="6" data-order="desc">▼</button>
+          </div>
+        </th>
+        <th>
+          カテゴリ
+          <div class="sort-buttons">
+            <button class="sort-icon" data-col="7" data-order="asc">▲</button>
+            <button class="sort-icon" data-col="7" data-order="desc">▼</button>
           </div>
         </th>
       </tr>
