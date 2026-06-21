@@ -19,7 +19,7 @@
   <div id="playmode">
     <span>プレイモード</span>
     <label>
-      <input type="radio" name="playmode" value="SP" checked>SP
+      <input type="radio" name="playmode" value="SP">SP
     </label>
     <label>
       <input type="radio" name="playmode" value="DP">DP
@@ -27,35 +27,77 @@
   </div>
 
   <div id="conditions">
-    <div id="version">
-      <span>バージョン</span>
-    </div>
+    <details id="selected-versions">
+      <summary>
+        <span class="summary-label">バージョン</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
     
-    <div id="difficulty">
-      <span>難易度</span>
-    </div>
-    
-    <div id="level">
-      <span>レベル</span>
-    </div>
-    
-    <div id="notesradar">
-      <span>ノーツレーダー</span>
-    </div>
+    <details id="selected-difficulties">
+      <summary>
+        <span class="summary-label">難易度</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
 
-    <div id="category">
-      <span>カテゴリ</span>
-    </div>
+    <details id="selected-levels">
+      <summary>
+        <span class="summary-label">レベル</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
+
+    <details id="selected-notesradars">
+      <summary>
+        <span class="summary-label">ノーツレーダー属性</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
+
+    <details id="selected-categories">
+      <summary>
+        <span class="summary-label">カテゴリ</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
 
     <div id="songname">
       <span>曲名検索</span>
       <input id="keyword_songname" placeholder="部分一致">
     </div>
+    
+    <button onclick="search()">検索</button>
   </div>
 
-  <div id="search">
-    <button onclick="search()">検索</button>
-    <div id="pager"></div>
+  <div>
+    <button onclick="toBottom()">下へ</button>
+    <div class="pager"></div>
   </div>
 
   <table>
@@ -117,5 +159,10 @@
     </thead>
     <tbody id="result"></tbody>
   </table>
+
+  <div>
+    <button onclick="toTop()">上へ</button>
+    <div class="pager"></div>
+  </div>
 </body>
 </html>

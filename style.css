@@ -10,10 +10,13 @@
   --accent-blue: #8ab4f8;
 }
 
-/* 全体 */
 body {
   background: var(--bg);
   color: var(--text);
+}
+
+button {
+  vertical-align: middle;
 }
 
 #last-modefied {
@@ -26,47 +29,14 @@ body {
   border: 1px solid var(--line);
 }
 
-#search {
-  margin: 5px;
+.summary-values {
+  color: #c4a438;
 }
 
-#pager {
-  display: inline-block;
+.checkbox-list {
+  display: inline;
 }
 
-/* テーブル */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--panel);
-  color: var(--text);
-}
-
-th,
-td {
-  border: 1px solid var(--line);
-  padding: 8px 10px;
-}
-
-tbody tr:nth-child(even) {
-  background: var(--row-blue);
-}
-
-tbody tr:hover {
-  background: var(--row-hover);
-}
-
-/* BPM・難易度・レベル列を中央揃え */
-th:nth-child(3),
-td:nth-child(3),
-th:nth-child(4),
-td:nth-child(4),
-th:nth-child(5),
-td:nth-child(5) {
-  text-align: center;
-}
-
-/* チェックボックス周り */
 label {
   display: inline-flex;
   align-items: center;
@@ -94,14 +64,6 @@ input[type="radio"] {
   accent-color: #6ea8ff;
 }
 
-.diff-LEGGENDARIA {
-  color: #c084fc;
-  font-weight: 700;
-} */
-
-/* =========================
-共通バッジ
-========================= */
 .version-badge,
 .songname-badge,
 .artist-badge,
@@ -122,7 +84,7 @@ input[type="radio"] {
 }
 
 .version-badge {
-  min-width: 110px;
+  min-width: 100px;
 }
 
 .songname-badge {
@@ -130,8 +92,12 @@ input[type="radio"] {
   color: #eef4ff;
 }
 
+.artist-badge {
+  min-width: 100px;
+}
+
 .diff-badge {
-  min-width: 92px;
+  min-width: 82px;
 }
 
 .level-badge {
@@ -140,20 +106,16 @@ input[type="radio"] {
 }
 
 .notesradar-badge {
-  min-width: 82px;
+  min-width: 72px;
 }
 
-/* =========================
-バージョン
-========================= */
+.category-badge {
+  min-width: 100px;
+}
 
 .ver-INFINITAS {
   color: #60b5ea;
 }
-
-/* =========================
-難易度
-========================= */
 
 .diff-BEGINNER {
   color: #6ee7b7;
@@ -174,10 +136,6 @@ input[type="radio"] {
 .diff-LEGGENDARIA {
   color: #c084fc;
 }
-
-/* =========================
-レベル
-========================= */
 
 .level-1,
 .level-2,
@@ -203,10 +161,6 @@ input[type="radio"] {
   color: #c084fc;
 }
 
-/* =========================
-ノーツレーダー
-========================= */
-
 .notesradar-NOTES {
   color: #60a5fa;
 }
@@ -231,13 +185,39 @@ input[type="radio"] {
   color: #2dd4bf;
 }
 
-.radar-unknown {
-  color: #cbd5e1;
+.pager {
+  display: inline-block;
 }
 
-/* =========================
-ソートボタン
-========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  color: var(--text);
+}
+
+th,
+td {
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--row-blue);
+}
+
+tbody tr:hover {
+  background: var(--row-hover);
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  text-align: center;
+}
 
 .sort-buttons {
   display: inline-flex;
@@ -274,12 +254,10 @@ input[type="radio"] {
   transform: scale(0.96);
 }
 
-/* 現在ソート中 */
 .sort-active {
   color: #8f9ba9;
 }
 
-/* 昇順・降順アイコン */
 .sort-icon {
   font-size: 0.75rem;
   line-height: 1;

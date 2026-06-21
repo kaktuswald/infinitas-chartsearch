@@ -2,44 +2,6 @@ const wikiurl = 'https://raw.githubusercontent.com/wiki/kaktuswald/infinitas-cha
 
 const pageSize = 100;
 
-const versions = [
-  "1st&substream",
-  "2nd style",
-  "3rd style",
-  "4th style",
-  "5th style",
-  "6th style",
-  "7th style",
-  "8th style",
-  "9th style",
-  "10th style",
-  "IIDX RED",
-  "HAPPY SKY",
-  "DistorteD",
-  "GOLD",
-  "DJ TROOPERS",
-  "EMPRESS",
-  "SIRIUS",
-  "Resort Anthem",
-  "Lincle",
-  "tricoro",
-  "SPADA",
-  "PENDUAL",
-  "copula",
-  "SINOBUZ",
-  "CANNON BALLERS",
-  "Rootage",
-  "HEROIC VERSE",
-  "BISTROVER",
-  "CastHour",
-  "RESIDENT",
-  "EPOLIS",
-  "Pinky Crush",
-  "Sparkle Shower",
-  "ZINRAI",
-  "INFINITAS",
-];
-
 const difficulties = [
   "BEGINNER",
   "NORMAL",
@@ -73,61 +35,6 @@ const notesradars = [
   "",
 ];
 
-const categories = [
-  "初期収録曲",
-  "DJP解禁曲",
-  "BIT解禁曲",
-  "The 4th セレクション 楽曲パック vol.1",
-  "楽曲パック vol.29",
-  "GITADORA セレクション 楽曲パック vol.1",
-  "楽曲パック vol.28",
-  "SOUND VOLTEX セレクション 楽曲パック vol.2",
-  "楽曲パック vol.27",
-  "楽曲パック vol.26",
-  "ULTIMATE MOBILE セレクション 楽曲パック vol.1",
-  "BPL セレクション 楽曲パック vol.2",
-  "楽曲パック vol.25",
-  "東方Project セレクション 楽曲パック vol.1",
-  "楽曲パック vol.24",
-  "楽曲パック vol.23",
-  "楽曲パック vol.22",
-  "pop'n music セレクション 楽曲パック vol.2",
-  "楽曲パック vol.21",
-  "楽曲パック vol.20",
-  "楽曲パック vol.19",
-  "SOUND VOLTEX セレクション 楽曲パック vol.1",
-  "楽曲パック vol.18",
-  "楽曲パック vol.17",
-  "BPL セレクション 楽曲パック vol.1",
-  "jubeat セレクション 楽曲パック vol.1",
-  "楽曲パック vol.16",
-  "スタートアップセレクション 楽曲パック vol.3",
-  "楽曲パック vol.15",
-  "スタートアップセレクション 楽曲パック vol.2",
-  "楽曲パック vol.14",
-  "pop'n music セレクション 楽曲パック vol.1",
-  "スタートアップセレクション 楽曲パック vol.1",
-  "楽曲パック vol.13",
-  "楽曲パック vol.12",
-  "楽曲パック vol.11",
-  "楽曲パック vol.10",
-  "楽曲パック vol.9",
-  "楽曲パック vol.8",
-  "楽曲パック vol.7",
-  "楽曲パック vol.6",
-  "楽曲パック vol.5",
-  "楽曲パック vol.4",
-  "楽曲パック vol.3",
-  "楽曲パック vol.2",
-  "楽曲パック vol.1",
-  "",
-]
-
-const default_checked = [
-  "HYPER",
-  "ANOTHER",
-];
-
 const data = {};
 
 let resultdata = [];
@@ -145,8 +52,8 @@ let orderMapCategories = {};
  * ロード完了時の初期処理
  */
 async function complete_loaded() {
-  document.querySelectorAll('.sort-buttons button').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll(".sort-buttons button").forEach(btn => {
+    btn.addEventListener("click", () => {
       sortColIndex = parseInt(btn.dataset.col, 10);
       sortOrder = btn.dataset.order;
 
@@ -157,54 +64,23 @@ async function complete_loaded() {
     });
   });
 
-  versions.forEach((key, i) => {
-    orderMapVersions[key] = i;
-    insert_checkbox(
-      document.querySelector("div#version"),
-      "version",
-      key,
-      key,
-    );
-  });
+  document.querySelectorAll("details button.selection-all").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const list = btn.parentElement.querySelector("div");
+      list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = true;
+      });
+    });
+  })
 
-  difficulties.forEach((key, i) => {
-    orderMapDifficulties[key] = i;
-    insert_checkbox(
-      document.querySelector("div#difficulty"),
-      "difficulty",
-      key,
-      key,
-    );
-  });
-
-  levels.forEach((key, i) => {
-    insert_checkbox(
-      document.querySelector("div#level"),
-      "level",
-      key,
-      key,
-    );
-  });
-
-  notesradars.forEach((key, i) => {
-    orderMapNotesradars[key] = i;
-    insert_checkbox(
-      document.querySelector("div#notesradar"),
-      "notesradar",
-      key !== "" ? key : "unknown",
-      key !== "" ? key : "不明",
-    );
-  });
-
-  categories.forEach((key, i) => {
-    orderMapCategories[key] = i;
-    insert_checkbox(
-      document.querySelector("div#category"),
-      "category",
-      key !== "" ? key : "unknown",
-      key !== "" ? key : "不明",
-    );
-  });
+  document.querySelectorAll("details button.selection-clear").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const list = btn.parentElement.querySelector("div");
+      list.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        cb.checked = false;
+      });
+    });
+  })
 
   const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
   if(response.ok) {
@@ -218,16 +94,64 @@ async function complete_loaded() {
     document.querySelector("span#last-modefied").textContent = `${year}年${month}月${day}日 ${hour}時${minute}分`;
 
     await Promise.all([
-      load_datafile("SP", timestamp),
-      load_datafile("DP", timestamp),
+      load_textfile("versions", "versions.txt", timestamp),
+      load_textfile("categories", "categories.txt", timestamp),
+      load_csvfile("SP", "SP.csv", timestamp),
+      load_csvfile("DP", "DP.csv", timestamp),
     ]);
+
+    data.versions.forEach((key, i) => {
+      orderMapVersions[key] = i;
+      insert_checkbox(
+        document.querySelector("#selected-versions div.checkbox-list"),
+        "version",
+        key !== "" ? key : "unknown",
+        key !== "" ? key : "不明",
+      );
+    });
+
+    difficulties.forEach((key, i) => {
+      orderMapDifficulties[key] = i;
+      insert_checkbox(
+        document.querySelector("#selected-difficulties div.checkbox-list"),
+        "difficulty",
+        key,
+        key,
+      );
+    });
+
+    levels.forEach((key, i) => {
+      insert_checkbox(
+        document.querySelector("#selected-levels div.checkbox-list"),
+        "level",
+        key,
+        key,
+      );
+    });
+
+    notesradars.forEach((key, i) => {
+      orderMapNotesradars[key] = i;
+      insert_checkbox(
+        document.querySelector("#selected-notesradars div.checkbox-list"),
+        "notesradar",
+        key !== "" ? key : "unknown",
+        key !== "" ? key : "不明",
+      );
+    });
+
+    data.categories.forEach((key, i) => {
+      orderMapCategories[key] = i;
+      insert_checkbox(
+        document.querySelector("#selected-categories div.checkbox-list"),
+        "category",
+        key !== "" ? key : "unknown",
+        key !== "" ? key : "不明",
+      );
+    });
 
     const selected_playmode = await JSON.parse(localStorage.getItem("selected_playmode") || null);
     if(selected_playmode)
       document.querySelector(`input[name="playmode"][value="${selected_playmode}"`).checked = true;
-    // document.querySelectorAll('input[name="playmode"]').forEach(cb => {
-    //   cb.checked = selected_playmode == cb.value;
-    // });
 
     const selected_version = await JSON.parse(localStorage.getItem("selected_version") || "[]");
     document.querySelectorAll('input[name="version"]').forEach(cb => {
@@ -265,28 +189,50 @@ async function complete_loaded() {
  * @param {String} value チェックボックスのvalue
  */
 function insert_checkbox(parent, name, value, text) {
-    const label = document.createElement("label");
+  const label = document.createElement("label");
 
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.name = name;
-    input.value = value;
-    if(default_checked.includes(value)) input.checked = true;
-    label.append(input);
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.name = name;
+  input.value = value;
+  label.append(input);
 
-    label.append(text);
-    parent.append(label);
+  label.append(text);
+  
+  parent.append(label);
 }
 
 /**
  * データCSVファイルをロードする
- * @param {String} playmode プレイモード
+ * @param {String} key キー
+ * @param {String} filename ファイル名
  * @param {String} timestamp データのタイムスタンプ
  * @returns Promiseインスタンス
  */
- function load_datafile(playmode, timestamp) {
+ function load_textfile(key, filename, timestamp) {
+  return fetch(`${wikiurl}/${filename}?${timestamp}`)
+    .then(response => {
+      if(!response.ok) throw new Error(response.status);
+      return response.text();
+    })
+    .then(text => {
+      if(text.includes('\r\n'))
+        data[key] = text.split('\r\n');
+      else
+        data[key] = text.split('\n');
+    })
+}
+
+/**
+ * データCSVファイルをロードする
+ * @param {String} key キー
+ * @param {String} filename ファイル名
+ * @param {String} timestamp データのタイムスタンプ
+ * @returns Promiseインスタンス
+ */
+ function load_csvfile(key, filename, timestamp) {
   return new Promise((resolve, reject) => {
-    Papa.parse(`${wikiurl}/${playmode}.csv?${timestamp}`, {
+    Papa.parse(`${wikiurl}/${filename}?${timestamp}`, {
       download: true,
       header: false,
       skipEmptyLines: true,
@@ -295,7 +241,7 @@ function insert_checkbox(parent, name, value, text) {
         4: true,
       },
       complete: function(results) {
-        data[playmode] = results.data.slice(1);
+        data[key] = results.data.slice(1);
         resolve();
       }
     });
@@ -308,29 +254,35 @@ function insert_checkbox(parent, name, value, text) {
 function search() {
   const selected_playmode = document.querySelector('input[name="playmode"]:checked').value;
 
-  const selected_version = Array.from(document.querySelectorAll('input[name="version"]:checked'))
+  const selected_versions = Array.from(document.querySelectorAll('input[name="version"]:checked'))
                         .map(cb => cb.value);
 
-  const selected_difficulty = Array.from(document.querySelectorAll('input[name="difficulty"]:checked'))
+  const selected_difficulties = Array.from(document.querySelectorAll('input[name="difficulty"]:checked'))
                         .map(cb => cb.value);
 
-  const selected_level = Array.from(document.querySelectorAll('input[name="level"]:checked'))
+  const selected_levels = Array.from(document.querySelectorAll('input[name="level"]:checked'))
                         .map(cb => cb.value);
 
-  const selected_notesradar = Array.from(document.querySelectorAll('input[name="notesradar"]:checked'))
+  const selected_notesradars = Array.from(document.querySelectorAll('input[name="notesradar"]:checked'))
                         .map(cb => cb.value);
 
-  const selected_category = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+  const selected_categories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
                         .map(cb => cb.value);
 
   const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
 
+  document.querySelector("#selected-versions .summary-values").textContent = `${selected_versions.join(', ')}`;
+  document.querySelector("#selected-difficulties .summary-values").textContent = `${selected_difficulties.join(', ')}`;
+  document.querySelector("#selected-levels .summary-values").textContent = `${selected_levels.join(', ')}`;
+  document.querySelector("#selected-notesradars .summary-values").textContent = `${selected_notesradars.join(', ')}`;
+  document.querySelector("#selected-categories .summary-values").textContent = `${selected_categories.join(', ')}`;
+
   localStorage.setItem("selected_playmode", JSON.stringify(selected_playmode));
-  localStorage.setItem("selected_version", JSON.stringify(selected_version));
-  localStorage.setItem("selected_difficulty", JSON.stringify(selected_difficulty));
-  localStorage.setItem("selected_level", JSON.stringify(selected_level));
-  localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradar));
-  localStorage.setItem("selected_category", JSON.stringify(selected_category));
+  localStorage.setItem("selected_version", JSON.stringify(selected_versions));
+  localStorage.setItem("selected_difficulty", JSON.stringify(selected_difficulties));
+  localStorage.setItem("selected_level", JSON.stringify(selected_levels));
+  localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradars));
+  localStorage.setItem("selected_category", JSON.stringify(selected_categories));
 
   const filtered = data[selected_playmode].filter(row => {
     const version = String(row[0] || "");
@@ -341,24 +293,24 @@ function search() {
     const category = String(row[7] || "");
 
     const match_version =
-      selected_version.length === 0 || selected_version.includes(version);
+      selected_versions.length === 0 || selected_versions.includes(version);
 
     const match_songname =
       keyword_songname === "" || songname.includes(keyword_songname);
 
     const match_difficulty =
-      selected_difficulty.length === 0 || selected_difficulty.includes(difficulty);
+      selected_difficulties.length === 0 || selected_difficulties.includes(difficulty);
 
     const match_level =
-      selected_level.length === 0 || selected_level.includes(level);
+      selected_levels.length === 0 || selected_levels.includes(level);
 
     const match_notesradar =
-      selected_notesradar.length === 0 ||
-      selected_notesradar.some(v => (v === "unknown" && notesradar === "") || notesradar.includes(v));
+      selected_notesradars.length === 0 ||
+      selected_notesradars.some(v => (v === "unknown" && notesradar === "") || notesradar.includes(v));
 
     const match_category =
-      selected_category.length === 0 ||
-      selected_category.some(v => (v === "unknown" && category === "") || category.includes(v));
+      selected_categories.length === 0 ||
+      selected_categories.some(v => (v === "unknown" && category === "") || category.includes(v));
 
     return match_version && match_songname && match_difficulty && match_level && match_notesradar && match_category;
   });
@@ -380,6 +332,20 @@ function search() {
   currentPage = 1;
 
   renderPage();
+}
+
+/**
+ * 一番下へスクロール
+ */
+function toBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/**
+ * 一番上へスクロール
+ */
+function toTop() {
+  window.scrollTo(0, 0);
 }
 
 /**
@@ -426,6 +392,7 @@ function compareValues(a, b, order) {
 function nextPage() {
   currentPage++;
   renderPage();
+  toTop();
 }
 
 /**
@@ -434,6 +401,7 @@ function nextPage() {
 function prevPage() {
   currentPage--;
   renderPage();
+  toTop();
 }
 
 /**
@@ -441,7 +409,6 @@ function prevPage() {
  */
 function renderPage() {
   const table = document.getElementById("result");
-  const pager = document.getElementById("pager");
 
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
@@ -482,7 +449,9 @@ function renderPage() {
   else
     pagerHtml += `<button onclick="nextPage() disabled">次へ</button>`;
 
-  pager.innerHTML = pagerHtml;
+  document.querySelectorAll(".pager").forEach(element => {
+    element.innerHTML = pagerHtml;
+  });
 }
 
 document.addEventListener("DOMContentLoaded", complete_loaded);
