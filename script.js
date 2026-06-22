@@ -82,6 +82,14 @@ async function complete_loaded() {
     });
   })
 
+  document.querySelector("button#selection-category-reverse").addEventListener("click", event => {
+    const list = event.target.parentElement.querySelector("div");
+    list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if(["初期収録曲", "DJP解禁曲", "BIT解禁曲"].includes(cb.value)) return;
+      cb.checked = !cb.checked;
+    });
+  });
+
   const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
   if(response.ok) {
     const timestamp = await response.text();
