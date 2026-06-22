@@ -433,7 +433,7 @@ function renderPage() {
 
   table.innerHTML = html || '<tr><td colspan="8">該当なし</td></tr>';
   
-  const totalPages = Math.ceil(resultdata.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(resultdata.length / pageSize));
 
   let pagerHtml = `${resultdata.length} 件`;
 
@@ -447,7 +447,7 @@ function renderPage() {
   if (currentPage < totalPages)
     pagerHtml += `<button onclick="nextPage()">次へ</button>`;
   else
-    pagerHtml += `<button onclick="nextPage() disabled">次へ</button>`;
+    pagerHtml += `<button onclick="nextPage()" disabled>次へ</button>`;
 
   document.querySelectorAll(".pager").forEach(element => {
     element.innerHTML = pagerHtml;
