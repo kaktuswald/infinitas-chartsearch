@@ -35,6 +35,12 @@ const notesradars = [
   "",
 ];
 
+const inarcades = [
+  "yes",
+  "no",
+  "",
+];
+
 const data = {};
 
 let resultdata = [];
@@ -47,6 +53,7 @@ let orderMapVersions = {};
 let orderMapDifficulties = {};
 let orderMapNotesradars = {};
 let orderMapCategories = {};
+let orderMapInArcades = {};
 
 /**
  * ロード完了時の初期処理
@@ -157,6 +164,16 @@ async function complete_loaded() {
       );
     });
 
+    inarcades.forEach((key, i) => {
+      orderMapInArcades[key] = i;
+      insert_checkbox(
+        document.querySelector("#selected-inarcades div.checkbox-list"),
+        "inarcade",
+        key !== "" ? key : "unknown",
+        key !== "" ? key : "不明",
+      );
+    });
+
     const selected_playmode = await JSON.parse(localStorage.getItem("selected_playmode") || null);
     if(selected_playmode)
       document.querySelector(`input[name="playmode"][value="${selected_playmode}"`).checked = true;
@@ -184,6 +201,11 @@ async function complete_loaded() {
     const selected_category = await JSON.parse(localStorage.getItem("selected_category") || "[]");
     document.querySelectorAll('input[name="category"]').forEach(cb => {
       cb.checked = selected_category.includes(cb.value);
+    });
+
+    const selected_inarcade = await JSON.parse(localStorage.getItem("selected_inarcade") || "[]");
+    document.querySelectorAll('input[name="inarcade"]').forEach(cb => {
+      cb.checked = selected_inarcade.includes(cb.value);
     });
 
     search();
@@ -277,6 +299,9 @@ function search() {
   const selected_categories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
                         .map(cb => cb.value);
 
+  const selected_inarcades = Array.from(document.querySelectorAll('input[name="inarcade"]:checked'))
+                        .map(cb => cb.value);
+
   const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
 
   document.querySelector("#selected-versions .summary-values").textContent = `${selected_versions.join(', ')}`;
@@ -284,6 +309,7 @@ function search() {
   document.querySelector("#selected-levels .summary-values").textContent = `${selected_levels.join(', ')}`;
   document.querySelector("#selected-notesradars .summary-values").textContent = `${selected_notesradars.join(', ')}`;
   document.querySelector("#selected-categories .summary-values").textContent = `${selected_categories.join(', ')}`;
+  document.querySelector("#selected-inarcades .summary-values").textContent = `${selected_inarcades.join(', ')}`;
 
   localStorage.setItem("selected_playmode", JSON.stringify(selected_playmode));
   localStorage.setItem("selected_version", JSON.stringify(selected_versions));
@@ -291,6 +317,7 @@ function search() {
   localStorage.setItem("selected_level", JSON.stringify(selected_levels));
   localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradars));
   localStorage.setItem("selected_category", JSON.stringify(selected_categories));
+  localStorage.setItem("selected_inarcade", JSON.stringify(selected_inarcades));
 
   const filtered = data[selected_playmode].filter(row => {
     const version = String(row[0] || "");
@@ -299,6 +326,7 @@ function search() {
     const level = String(row[4] || "");
     const notesradar = String(row[6] || "");
     const category = String(row[7] || "");
+    const inarcade = String(row[8] || "");
 
     const match_version =
       selected_versions.length === 0 || selected_versions.includes(version);
@@ -320,7 +348,11 @@ function search() {
       selected_categories.length === 0 ||
       selected_categories.some(v => (v === "unknown" && category === "") || category.includes(v));
 
-    return match_version && match_songname && match_difficulty && match_level && match_notesradar && match_category;
+    const match_inarcade =
+      selected_inarcades.length === 0 ||
+      selected_inarcades.some(v => (v === "unknown" && inarcade === "") || inarcade.includes(v));
+
+    return match_version && match_songname && match_difficulty && match_level && match_notesradar && match_category && match_inarcade;
   });
 
   if(sortColIndex === 1) {
@@ -389,9 +421,12 @@ function compareValues(a, b, order) {
       else
         result = a.includes("/") ? -1 : 1;
       break;
+    case 8:
+      result = orderMapInArcades[a] - orderMapInArcades[b];
+      break;
   }
 
-  return order === 'asc' ? result : -result;
+  return order === "asc" ? result : -result;
 }
 
 /**
@@ -416,14 +451,11 @@ function prevPage() {
  * 検索結果をレンダリングする
  */
 function renderPage() {
-  const table = document.getElementById("result");
-
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
   const pageRows = resultdata.slice(start, end);
 
   let html = "";
-  
   pageRows.forEach(row => {
     html += `
       <tr>
@@ -434,13 +466,15 @@ function renderPage() {
         <td class="level-badge level-${row[4]}">${row[4] || ""}</td>
         <td class="notes-badge">${row[5]}</td>
         <td class="notesradar-badge notesradar-${row[6]}">${row[6] || ""}</td>
-        <td class="categor-badge categor-${row[7]}">${row[7] || ""}</td>
+        <td class="categor-badge category-${row[7]}">${row[7] || ""}</td>
+        <td class="inarcade-badge inarcade-${row[8]}">${row[8] || ""}</td>
       </tr>
     `;
   });
 
-  table.innerHTML = html || '<tr><td colspan="8">該当なし</td></tr>';
-  
+  const tbody = document.getElementById("result");
+  tbody.innerHTML = html || `<tr><td colspan="${document.querySelectorAll('th').length}">該当なし</td></tr>`;
+
   const totalPages = Math.max(1, Math.ceil(resultdata.length / pageSize));
 
   let pagerHtml = `${resultdata.length} 件`;

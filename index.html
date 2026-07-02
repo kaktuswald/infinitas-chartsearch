@@ -91,6 +91,18 @@
       </div>
     </details>
 
+    <details id="selected-inarcades">
+      <summary>
+        <span class="summary-label">AC収録</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <button class="selection-all">すべて</button>
+        <button class="selection-clear">クリア</button>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
+
     <div id="songname">
       <span>曲名検索</span>
       <input id="keyword_songname" placeholder="部分一致">
@@ -157,6 +169,13 @@
           <div class="sort-buttons">
             <button class="sort-icon" data-col="7" data-order="asc">▲</button>
             <button class="sort-icon" data-col="7" data-order="desc">▼</button>
+          </div>
+        </th>
+        <th>
+          AC収録
+          <div class="sort-buttons">
+            <button class="sort-icon" data-col="8" data-order="asc">▲</button>
+            <button class="sort-icon" data-col="8" data-order="desc">▼</button>
           </div>
         </th>
       </tr>

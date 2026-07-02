@@ -15,14 +15,14 @@ for filename in ("SP.csv", "DP.csv",):
 
         reader = list(csv.reader(fin))[1:]
         writer = csv.writer(fout)
-        writer.writerow(("バージョン", "曲名", "アーティスト", "難易度", "レベル", "ノーツ数", "ノーツレーダー属性", "カテゴリ",))
+        writer.writerow(("バージョン", "曲名", "アーティスト", "難易度", "レベル", "ノーツ数", "ノーツレーダー属性", "カテゴリ", "AC収録"))
 
         for row in reader:
             if not row[1] in songs.keys():
                 print(f"Not exist: {row[1]}")
                 continue
 
-            new_row = [
+            writer.writerow((
                 row[0],
                 row[1],
                 songs[row[1]][1],
@@ -31,8 +31,8 @@ for filename in ("SP.csv", "DP.csv",):
                 row[23],
                 row[24],
                 songs[row[1]][2],
-            ]
-            writer.writerow(new_row)
+                songs[row[1]][3],
+            ))
 
     with open(join("wiki", 'timestamp.txt'), "w", encoding="utf-8") as f:
         f.write(datetime.now().strftime("%Y%m%d%H%M%S"))

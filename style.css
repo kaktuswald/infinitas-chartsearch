@@ -71,7 +71,8 @@ input[type="radio"] {
 .level-badge,
 .notes-badge,
 .notesradar-badge,
-.category-badge {
+.category-badge,
+.inarcade-badge {
   align-items: center;
   justify-content: center;
   min-height: 24px;
@@ -101,8 +102,12 @@ input[type="radio"] {
 }
 
 .level-badge {
-  min-width: 40px;
+  min-width: 30px;
   padding-inline: 8px;
+}
+
+.notes-badge { 
+  min-width: 30px;
 }
 
 .notesradar-badge {
@@ -110,7 +115,11 @@ input[type="radio"] {
 }
 
 .category-badge {
-  min-width: 100px;
+  min-width: 90px;
+}
+
+.inarcade-badge {
+  min-width: 30px;
 }
 
 .ver-INFINITAS {
@@ -210,13 +219,15 @@ tbody tr:hover {
   background: var(--row-hover);
 }
 
-th:nth-child(3),
-td:nth-child(3),
-th:nth-child(4),
 td:nth-child(4),
-th:nth-child(5),
-td:nth-child(5) {
+td:nth-child(5),
+td:nth-child(7),
+td:nth-child(9) {
   text-align: center;
+}
+
+td:nth-child(6) {
+  text-align: right;
 }
 
 .sort-buttons {
