@@ -36,8 +36,7 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
+        <label><input type="checkbox" class="select-all">すべて</label>
         <div class="checkbox-list"></div>
       </div>
     </details>
@@ -48,8 +47,7 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
+        <label><input type="checkbox" class="select-all">すべて</label>
         <div class="checkbox-list"></div>
       </div>
     </details>
@@ -60,8 +58,7 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
+        <label><input type="checkbox" class="select-all">すべて</label>
         <div class="checkbox-list"></div>
       </div>
     </details>
@@ -72,8 +69,7 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
+        <label><input type="checkbox" class="select-all">すべて</label>
         <div class="checkbox-list"></div>
       </div>
     </details>
@@ -84,9 +80,8 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
-        <button id="selection-category-reverse">楽曲パック反転</button>
+        <button id="category-selection-reverse">楽曲パック反転</button>
+        <label><input type="checkbox" class="select-all">すべて</label>
         <div class="checkbox-list"></div>
       </div>
     </details>
@@ -97,22 +92,35 @@
         <span class="summary-values"></span>
       </summary>
       <div class="conditions-inner">
-        <button class="selection-all">すべて</button>
-        <button class="selection-clear">クリア</button>
+        <label><input type="checkbox" class="select-all">すべて</button></label>
         <div class="checkbox-list"></div>
       </div>
     </details>
-
-    <div id="songname">
-      <span>曲名検索</span>
-      <input id="keyword_songname" placeholder="部分一致">
-    </div>
-    
-    <button onclick="search()">検索</button>
   </div>
 
+  <div id="songname">
+    <span>曲名検索</span>
+    <input id="keyword-songname" placeholder="部分一致" onchange="search();">
+  </div>
+
+  <details id="selected-hidecolumns">
+    <summary>
+      <span class="summary-label">列非表示</span>
+      <span class="summary-values"></span>
+    </summary>
+    <div>
+      <label><input type="checkbox" class="hidecolumn" data-col="0" value="バージョン" checked>バージョン</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="2" value="アーティスト" checked>アーティスト</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="4" value="レベル" checked>レベル</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="5" value="ノーツ数" checked>ノーツ数</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="6" value="レーダー" checked>レーダー</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="7" value="カテゴリ" checked>カテゴリ</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="8" value="AC収録" checked>AC収録</label>
+    </div>
+  </details>
+
   <div>
-    <button onclick="toBottom()">下へ</button>
+    <button onclick="toBottom();">下へ</button>
     <div class="pager"></div>
   </div>
 
@@ -184,7 +192,7 @@
   </table>
 
   <div>
-    <button onclick="toTop()">上へ</button>
+    <button onclick="toTop();">上へ</button>
     <div class="pager"></div>
   </div>
 </body>

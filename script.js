@@ -59,43 +59,12 @@ let orderMapInArcades = {};
  * ロード完了時の初期処理
  */
 async function complete_loaded() {
-  document.querySelectorAll(".sort-buttons button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      sortColIndex = parseInt(btn.dataset.col, 10);
-      sortOrder = btn.dataset.order;
-
-      document.querySelectorAll(".sort-icon").forEach(element => element.classList.remove("sort-active"));
-      btn.classList.add("sort-active");
-
-      search();
-    });
-  });
-
-  document.querySelectorAll("details button.selection-all").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const list = btn.parentElement.querySelector("div");
-      list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-        cb.checked = true;
-      });
-    });
-  })
-
-  document.querySelectorAll("details button.selection-clear").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const list = btn.parentElement.querySelector("div");
-      list.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
-        cb.checked = false;
-      });
-    });
-  })
-
-  document.querySelector("button#selection-category-reverse").addEventListener("click", event => {
-    const list = event.target.parentElement.querySelector("div");
-    list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-      if(["初期収録曲", "DJP解禁曲", "BIT解禁曲"].includes(cb.value)) return;
-      cb.checked = !cb.checked;
-    });
-  });
+  document.querySelectorAll("input[type='radio']").forEach(rb => rb.addEventListener("input", search));
+  document.querySelectorAll(".select-all").forEach(cb => cb.addEventListener("click", () => selectall(cb)));
+  document.querySelector("#category-selection-reverse").addEventListener("click", selectpackreverse);
+  document.querySelector("#keyword-songname").addEventListener("input", search);
+  document.querySelectorAll(".hidecolumn").forEach(cb => cb.addEventListener("click", search));
+  document.querySelectorAll(".sort-buttons button").forEach(btn => btn.addEventListener("click", () => switchsort(btn)));
 
   const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
   if(response.ok) {
@@ -208,13 +177,18 @@ async function complete_loaded() {
       cb.checked = selected_inarcade.includes(cb.value);
     });
 
+    const selected_hidecolumns = await JSON.parse(localStorage.getItem("selected_hidecolumn") || "[]");
+    document.querySelectorAll('.hidecolumn').forEach(cb => {
+      cb.checked = selected_hidecolumns.includes(cb.value);
+    });
+
     search();
   }
 }
 
 /**
  * チェックボックスを親要素に挿入
- * @param {*} parent 親要素
+ * @param {Element} parent 親要素
  * @param {String} name チェックボックスのname
  * @param {String} value チェックボックスのvalue
  */
@@ -225,6 +199,7 @@ function insert_checkbox(parent, name, value, text) {
   input.type = "checkbox";
   input.name = name;
   input.value = value;
+  input.onclick = search;
   label.append(input);
 
   label.append(text);
@@ -279,6 +254,70 @@ function insert_checkbox(parent, name, value, text) {
 }
 
 /**
+ * すべてのチェックをクリック
+ * 
+ * チェックが入る場合は全てのチェックをONにする。チェックが外れる場合は全てのチェックをOFFにする。
+ * @param {Element} cb チェックボックス
+ */
+function selectall(cb) {
+  const parent = cb.closest("div");
+  parent.querySelectorAll(".checkbox-list input").forEach(el => el.checked = cb.checked);
+
+  search();
+}
+
+/**
+ * 絞り込み楽曲パック選択肢を反転する
+ */
+function selectpackreverse() {
+  const parent = document.querySelector("#selected-categories");
+
+  parent.querySelectorAll(".checkbox-list input").forEach(cb => {
+    if(["初期収録曲", "DJP解禁曲", "BIT解禁曲"].includes(cb.value)) return;
+    cb.checked = !cb.checked;
+  });
+
+  search();
+}
+
+/**
+ * ソート条件を変更する
+ * @param {Element} btn 押したボタン
+ */
+function switchsort(btn) {
+  sortColIndex = parseInt(btn.dataset.col, 10);
+  sortOrder = btn.dataset.order;
+
+  document.querySelectorAll(".sort-icon").forEach(element => element.classList.remove("sort-active"));
+  btn.classList.add("sort-active");
+
+  search();
+}
+
+/**
+ * 
+ * @param {Element} cb チェックボックス
+ */
+function switchcolumnshow(cb) {
+  const index = parseInt(cb.dataset.col, 10) + 1;
+
+  if(cb.checked) {
+    document.querySelectorAll(`th:nth-child(${index})`).forEach(t => t.classList.remove("cell-hide"));
+    document.querySelectorAll(`td:nth-child(${index})`).forEach(t => t.classList.remove("cell-hide"));
+  }
+  else {
+    document.querySelectorAll(`th:nth-child(${index})`).forEach(t => t.classList.add("cell-hide"));
+    document.querySelectorAll(`td:nth-child(${index})`).forEach(t => t.classList.add("cell-hide"));
+  }
+
+  const selected_hidecolumns = Array.from(document.querySelectorAll('.hidecolumn:checked'))
+    .map(cb => cb.value);
+  localStorage.setItem("selected_hidecolumn", JSON.stringify(selected_hidecolumns));
+
+  document.querySelector("#selected-hidecolumns .summary-values").textContent = `${selected_hidecolumns.join(', ')}`;
+}
+
+/**
  * 検索する
  */
 function search() {
@@ -302,14 +341,18 @@ function search() {
   const selected_inarcades = Array.from(document.querySelectorAll('input[name="inarcade"]:checked'))
                         .map(cb => cb.value);
 
-  const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
+  const keyword_songname = document.getElementById("keyword-songname").value.toLowerCase();
 
+  const selected_hidecolumns = Array.from(document.querySelectorAll('.hidecolumn:checked'))
+    .map(cb => cb.value);
+  
   document.querySelector("#selected-versions .summary-values").textContent = `${selected_versions.join(', ')}`;
   document.querySelector("#selected-difficulties .summary-values").textContent = `${selected_difficulties.join(', ')}`;
   document.querySelector("#selected-levels .summary-values").textContent = `${selected_levels.join(', ')}`;
   document.querySelector("#selected-notesradars .summary-values").textContent = `${selected_notesradars.join(', ')}`;
   document.querySelector("#selected-categories .summary-values").textContent = `${selected_categories.join(', ')}`;
   document.querySelector("#selected-inarcades .summary-values").textContent = `${selected_inarcades.join(', ')}`;
+  document.querySelector("#selected-hidecolumns .summary-values").textContent = `${selected_hidecolumns.join(', ')}`;
 
   localStorage.setItem("selected_playmode", JSON.stringify(selected_playmode));
   localStorage.setItem("selected_version", JSON.stringify(selected_versions));
@@ -318,6 +361,7 @@ function search() {
   localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradars));
   localStorage.setItem("selected_category", JSON.stringify(selected_categories));
   localStorage.setItem("selected_inarcade", JSON.stringify(selected_inarcades));
+  localStorage.setItem("selected_hidecolumn", JSON.stringify(selected_hidecolumns));
 
   const filtered = data[selected_playmode].filter(row => {
     const version = String(row[0] || "");
@@ -493,6 +537,15 @@ function renderPage() {
 
   document.querySelectorAll(".pager").forEach(element => {
     element.innerHTML = pagerHtml;
+  });
+
+  document.querySelectorAll(`th`).forEach(t => t.classList.remove("cell-hide"));
+  document.querySelectorAll(`td`).forEach(t => t.classList.remove("cell-hide"));
+  document.querySelectorAll(".hidecolumn:checked").forEach(cb => {
+    const index = parseInt(cb.dataset.col, 10) + 1;
+
+    document.querySelectorAll(`th:nth-child(${index})`).forEach(t => t.classList.add("cell-hide"));
+    document.querySelectorAll(`td:nth-child(${index})`).forEach(t => t.classList.add("cell-hide"));
   });
 }
 

@@ -30,7 +30,13 @@ button {
 }
 
 .summary-values {
+  display: inline-block;
+  vertical-align: middle;
   color: #c4a438;
+  white-space: nowrap;
+  max-width: 350px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .checkbox-list {
@@ -228,6 +234,10 @@ td:nth-child(9) {
 
 td:nth-child(6) {
   text-align: right;
+}
+
+.cell-hide {
+  display: none;
 }
 
 .sort-buttons {
