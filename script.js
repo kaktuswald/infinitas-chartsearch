@@ -38,6 +38,7 @@ const notesradars = [
 const inarcades = [
   "yes",
   "no",
+  "mismatch",
   "",
 ];
 
@@ -89,6 +90,12 @@ async function complete_loaded() {
       insert_checkbox(
         document.querySelector("#selected-versions div.checkbox-list"),
         "version",
+        key !== "" ? key : "unknown",
+        key !== "" ? key : "不明",
+      );
+      insert_checkbox(
+        document.querySelector("#selected-acversions div.checkbox-list"),
+        "acversion",
         key !== "" ? key : "unknown",
         key !== "" ? key : "不明",
       );
@@ -242,8 +249,8 @@ function insert_checkbox(parent, name, value, text) {
       header: false,
       skipEmptyLines: true,
       dynamicTyping: {
-        3: true,
         4: true,
+        5: true,
       },
       complete: function(results) {
         data[key] = results.data.slice(1);
@@ -326,6 +333,9 @@ function search() {
   const selected_versions = Array.from(document.querySelectorAll('input[name="version"]:checked'))
                         .map(cb => cb.value);
 
+  const selected_acversions = Array.from(document.querySelectorAll('input[name="acversion"]:checked'))
+                        .map(cb => cb.value);
+
   const selected_difficulties = Array.from(document.querySelectorAll('input[name="difficulty"]:checked'))
                         .map(cb => cb.value);
 
@@ -347,6 +357,7 @@ function search() {
     .map(cb => cb.value);
   
   document.querySelector("#selected-versions .summary-values").textContent = `${selected_versions.join(', ')}`;
+  document.querySelector("#selected-acversions .summary-values").textContent = `${selected_acversions.join(', ')}`;
   document.querySelector("#selected-difficulties .summary-values").textContent = `${selected_difficulties.join(', ')}`;
   document.querySelector("#selected-levels .summary-values").textContent = `${selected_levels.join(', ')}`;
   document.querySelector("#selected-notesradars .summary-values").textContent = `${selected_notesradars.join(', ')}`;
@@ -356,6 +367,7 @@ function search() {
 
   localStorage.setItem("selected_playmode", JSON.stringify(selected_playmode));
   localStorage.setItem("selected_version", JSON.stringify(selected_versions));
+  localStorage.setItem("selected_acversion", JSON.stringify(selected_acversions));
   localStorage.setItem("selected_difficulty", JSON.stringify(selected_difficulties));
   localStorage.setItem("selected_level", JSON.stringify(selected_levels));
   localStorage.setItem("selected_notesradar", JSON.stringify(selected_notesradars));
@@ -366,17 +378,23 @@ function search() {
   const filtered = data[selected_playmode].filter(row => {
     const version = String(row[0] || "");
     const songname = String(row[1] || "").toLowerCase();
-    const difficulty = String(row[3] || "");
-    const level = String(row[4] || "");
-    const notesradar = String(row[6] || "");
-    const category = String(row[7] || "");
-    const inarcade = String(row[8] || "");
+    const acversion = String(row[3] || "");
+    const difficulty = String(row[4] || "");
+    const level = String(row[5] || "");
+    const notesradar = String(row[7] || "");
+    const category = String(row[8] || "");
+    const inarcade = String(row[9] || "");
 
     const match_version =
-      selected_versions.length === 0 || selected_versions.includes(version);
+      selected_versions.length === 0 ||
+      selected_versions.some(v => (v === "unknown" && version === "") || version.includes(v));
 
     const match_songname =
       keyword_songname === "" || songname.includes(keyword_songname);
+
+    const match_acversion =
+      selected_acversions.length === 0 ||
+      selected_acversions.some(v => (v === "unknown" && acversion === "") || acversion.includes(v));
 
     const match_difficulty =
       selected_difficulties.length === 0 || selected_difficulties.includes(difficulty);
@@ -396,7 +414,7 @@ function search() {
       selected_inarcades.length === 0 ||
       selected_inarcades.some(v => (v === "unknown" && inarcade === "") || inarcade.includes(v));
 
-    return match_version && match_songname && match_difficulty && match_level && match_notesradar && match_category && match_inarcade;
+    return match_version && match_songname && match_acversion && match_difficulty && match_level && match_notesradar && match_category && match_inarcade;
   });
 
   if(sortColIndex === 1) {
@@ -444,28 +462,29 @@ function compareValues(a, b, order) {
 
   switch(sortColIndex) {
     case 0:
+    case 3:
       result = orderMapVersions[a] - orderMapVersions[b];
       break;
-    case 3:
+    case 4:
       result = orderMapDifficulties[a] - orderMapDifficulties[b];
       break;
-    case 4:
     case 5:
+    case 6:
       result = a - b;
       break;
-    case 6:
+    case 7:
       if(!a.includes("/") && !b.includes("/"))
         result = orderMapNotesradars[a] - orderMapNotesradars[b];
       else
         result = a.includes("/") ? -1 : 1;
       break;
-    case 7:
+    case 8:
       if(!a.includes("/") && !b.includes("/"))
         result = orderMapCategories[a] - orderMapCategories[b];
       else
         result = a.includes("/") ? -1 : 1;
       break;
-    case 8:
+    case 9:
       result = orderMapInArcades[a] - orderMapInArcades[b];
       break;
   }
@@ -506,12 +525,13 @@ function renderPage() {
         <td class="version-badge ver-${row[0].replace(" ", "_")}">${row[0] || ""}</td>
         <td class="songname-badge">${row[1] || ""}</td>
         <td class="artist-badge">${row[2] || ""}</td>
-        <td class="diff-badge diff-${row[3]}">${row[3] || ""}</td>
-        <td class="level-badge level-${row[4]}">${row[4] || ""}</td>
-        <td class="notes-badge">${row[5]}</td>
-        <td class="notesradar-badge notesradar-${row[6]}">${row[6] || ""}</td>
-        <td class="categor-badge category-${row[7]}">${row[7] || ""}</td>
-        <td class="inarcade-badge inarcade-${row[8]}">${row[8] || ""}</td>
+        <td class="acversion-badge ver-${(row[3] || "").replace(" ", "_")}">${row[3] || ""}</td>
+        <td class="diff-badge diff-${row[4]}">${row[4] || ""}</td>
+        <td class="level-badge level-${row[5]}">${row[5] || ""}</td>
+        <td class="notes-badge">${row[6]}</td>
+        <td class="notesradar-badge notesradar-${row[7]}">${row[7] || ""}</td>
+        <td class="category-badge category-${row[8]}">${row[8] || ""}</td>
+        <td class="inarcade-badge inarcade-${row[9]}">${row[9] || ""}</td>
       </tr>
     `;
   });

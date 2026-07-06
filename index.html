@@ -41,6 +41,17 @@
       </div>
     </details>
     
+    <details id="selected-acversions">
+      <summary>
+        <span class="summary-label">ACバージョン</span>
+        <span class="summary-values"></span>
+      </summary>
+      <div class="conditions-inner">
+        <label><input type="checkbox" class="select-all">すべて</label>
+        <div class="checkbox-list"></div>
+      </div>
+    </details>
+    
     <details id="selected-difficulties">
       <summary>
         <span class="summary-label">難易度</span>
@@ -111,11 +122,12 @@
     <div>
       <label><input type="checkbox" class="hidecolumn" data-col="0" value="バージョン" checked>バージョン</label>
       <label><input type="checkbox" class="hidecolumn" data-col="2" value="アーティスト" checked>アーティスト</label>
-      <label><input type="checkbox" class="hidecolumn" data-col="4" value="レベル" checked>レベル</label>
-      <label><input type="checkbox" class="hidecolumn" data-col="5" value="ノーツ数" checked>ノーツ数</label>
-      <label><input type="checkbox" class="hidecolumn" data-col="6" value="レーダー" checked>レーダー</label>
-      <label><input type="checkbox" class="hidecolumn" data-col="7" value="カテゴリ" checked>カテゴリ</label>
-      <label><input type="checkbox" class="hidecolumn" data-col="8" value="AC収録" checked>AC収録</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="3" value="ACバージョン" checked>ACバージョン</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="5" value="レベル" checked>レベル</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="6" value="ノーツ数" checked>ノーツ数</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="7" value="レーダー" checked>レーダー</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="8" value="カテゴリ" checked>カテゴリ</label>
+      <label><input type="checkbox" class="hidecolumn" data-col="9" value="AC収録" checked>AC収録</label>
     </div>
   </details>
 
@@ -145,45 +157,52 @@
           アーティスト
         </th>
         <th>
-          難易度
+          ACバージョン
           <div class="sort-buttons">
             <button class="sort-icon" data-col="3" data-order="asc">▲</button>
             <button class="sort-icon" data-col="3" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          レベル
+          難易度
           <div class="sort-buttons">
             <button class="sort-icon" data-col="4" data-order="asc">▲</button>
             <button class="sort-icon" data-col="4" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          ノーツ数
+          レベル
           <div class="sort-buttons">
             <button class="sort-icon" data-col="5" data-order="asc">▲</button>
             <button class="sort-icon" data-col="5" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          レーダー
+          ノーツ数
           <div class="sort-buttons">
             <button class="sort-icon" data-col="6" data-order="asc">▲</button>
             <button class="sort-icon" data-col="6" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          カテゴリ
+          レーダー
           <div class="sort-buttons">
             <button class="sort-icon" data-col="7" data-order="asc">▲</button>
             <button class="sort-icon" data-col="7" data-order="desc">▼</button>
           </div>
         </th>
         <th>
-          AC収録
+          カテゴリ
           <div class="sort-buttons">
             <button class="sort-icon" data-col="8" data-order="asc">▲</button>
             <button class="sort-icon" data-col="8" data-order="desc">▼</button>
+          </div>
+        </th>
+        <th>
+          AC収録
+          <div class="sort-buttons">
+            <button class="sort-icon" data-col="9" data-order="asc">▲</button>
+            <button class="sort-icon" data-col="9" data-order="desc">▼</button>
           </div>
         </th>
       </tr>

@@ -73,6 +73,7 @@ input[type="radio"] {
 .version-badge,
 .songname-badge,
 .artist-badge,
+.acversion-badge,
 .diff-badge,
 .level-badge,
 .notes-badge,
@@ -90,7 +91,8 @@ input[type="radio"] {
   white-space: nowrap;
 }
 
-.version-badge {
+.version-badge,
+.acversion-badge {
   min-width: 100px;
 }
 
@@ -225,14 +227,14 @@ tbody tr:hover {
   background: var(--row-hover);
 }
 
-td:nth-child(4),
 td:nth-child(5),
-td:nth-child(7),
-td:nth-child(9) {
+td:nth-child(6),
+td:nth-child(8),
+td:nth-child(10) {
   text-align: center;
 }
 
-td:nth-child(6) {
+td:nth-child(7) {
   text-align: right;
 }
 
