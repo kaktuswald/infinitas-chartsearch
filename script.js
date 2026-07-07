@@ -159,6 +159,11 @@ async function complete_loaded() {
       cb.checked = selected_version.includes(cb.value);
     });
 
+    const selected_acversion = await JSON.parse(localStorage.getItem("selected_acversion") || "[]");
+    document.querySelectorAll('input[name="acversion"]').forEach(cb => {
+      cb.checked = selected_acversion.includes(cb.value);
+    });
+
     const selected_difficulty = await JSON.parse(localStorage.getItem("selected_difficulty") || "[]");
     document.querySelectorAll('input[name="difficulty"]').forEach(cb => {
       cb.checked = selected_difficulty.includes(cb.value);
