@@ -38,6 +38,7 @@ const notesradars = [
 const inarcades = [
   "yes",
   "no",
+  "removed",
   "mismatch",
   "probably",
   "",
