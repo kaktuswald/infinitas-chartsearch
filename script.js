@@ -39,6 +39,7 @@ const inarcades = [
   "yes",
   "no",
   "mismatch",
+  "probably",
   "",
 ];
 
